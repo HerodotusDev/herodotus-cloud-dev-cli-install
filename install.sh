@@ -194,34 +194,6 @@ verify_installation() {
     fi
 }
 
-# Function to show usage instructions
-show_usage() {
-    echo ""
-    echo -e "${BOLD}${GREEN} Installation Complete!${NC}"
-    echo ""
-    echo -e "${BOLD}USAGE:${NC}"
-    echo "    herodotus <command> [options]"
-    echo ""
-    echo -e "${BOLD}COMMANDS:${NC}"
-    echo "    db forward    Start port-forwarding for PostgreSQL databases"
-    echo "    db get        Extract database URLs from Kubernetes secrets"
-    echo "    update        Update Herodotus CLI to latest version"
-    echo "    version       Show version information"
-    echo "    help          Show help message"
-    echo ""
-    echo -e "${BOLD}EXAMPLES:${NC}"
-    echo "    herodotus db forward"
-    echo "    herodotus db get"
-    echo "    herodotus update"
-    echo "    herodotus version"
-    echo ""
-    echo -e "${BOLD}NOTE:${NC} If 'herodotus' command is not found, please:"
-    echo "    1. Restart your terminal, or"
-    echo "    2. Run: ${CYAN}source ~/.zshrc${NC} (or ${CYAN}source ~/.bashrc${NC})"
-    echo ""
-    echo -e "${BOLD}UPDATE:${NC} To update to the latest version:"
-    echo "    herodotus update"
-}
 
 # Main installation function
 main() {
@@ -243,7 +215,20 @@ main() {
     
     # Verify installation
     if verify_installation; then
-        show_usage
+        echo ""
+        echo -e "${BOLD}${GREEN} Installation Complete!${NC}"
+        echo ""
+        echo -e "${CYAN}Running 'herodotus help' to show available commands:${NC}"
+        echo ""
+        
+        # Try to run herodotus help
+        if command_exists herodotus; then
+            herodotus help
+        else
+            echo -e "${YELLOW}Note:${NC} 'herodotus' command not found in current PATH"
+            echo -e "Please restart your terminal or run: ${CYAN}source ~/.zshrc${NC} (or ${CYAN}source ~/.bashrc${NC})"
+            echo -e "Then run: ${CYAN}herodotus help${NC}"
+        fi
     else
         echo -e "${RED}Installation failed. Please check the error messages above.${NC}" >&2
         exit 1
