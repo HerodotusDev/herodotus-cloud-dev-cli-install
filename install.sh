@@ -90,7 +90,7 @@ show_auth_instructions() {
     echo -e "${BOLD}Option 1: GitHub CLI (Recommended)${NC}"
     echo -e "1. Install GitHub CLI: ${CYAN}brew install gh${NC} (macOS) or ${CYAN}sudo apt install gh${NC} (Ubuntu)"
     echo -e "2. Authenticate: ${CYAN}gh auth login${NC}"
-    echo -e "3. Re-run this script: ${CYAN}curl -sSL https://gist.githubusercontent.com/your-username/your-gist-id/raw/install.sh | bash${NC}"
+    echo -e "3. Re-run this script: ${CYAN}curl -sSL https://raw.githubusercontent.com/HerodotusDev/herodotus-cloud-dev-cli-install/main/install.sh | bash${NC}"
     echo ""
     echo -e "${BOLD}Option 2: Personal Access Token${NC}"
     echo -e "1. Create a token at: ${CYAN}https://github.com/settings/tokens${NC}"
