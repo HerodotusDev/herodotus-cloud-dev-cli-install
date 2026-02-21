@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 REPO_URL="https://github.com/HerodotusDev/herodotus-cloud-dev-cli"
 INSTALL_DIR="${HOME}/.local/bin"
 HERODOTUS_DIR="${HOME}/.herodotus"
-VERSION="1.0.0"
+VERSION="1.1.3"
 
 # Function to detect OS and architecture
 detect_platform() {
@@ -54,7 +54,7 @@ check_dependencies() {
     
     if [[ ${#missing_deps[@]} -gt 0 ]]; then
         echo -e "${YELLOW}WARNING:${NC} Missing dependencies: ${missing_deps[*]}" >&2
-        echo -e "Please install them before using Herodotus CLI" >&2
+        echo -e "Please install them before using Hero CLI (hero / h)" >&2
         echo ""
     fi
 }
@@ -104,9 +104,9 @@ show_auth_instructions() {
     echo -e "${YELLOW}After authentication, re-run this installation script.${NC}"
 }
 
-# Function to download and install Herodotus CLI
-install_herodotus() {
-    echo -e "${BLUE}Downloading Herodotus CLI...${NC}"
+# Function to download and install Hero CLI
+install_hero() {
+    echo -e "${BLUE}Downloading Hero CLI...${NC}"
     
     # Check git authentication first
     if ! check_git_auth; then
@@ -131,11 +131,15 @@ install_herodotus() {
     
     # Copy files to installation directory
     echo -e "${CYAN}Installing files...${NC}"
-    cp "$temp_dir/herodotus-cli/herodotus" "$INSTALL_DIR/"
+    cp "$temp_dir/herodotus-cli/hero" "$INSTALL_DIR/"
     cp -r "$temp_dir/herodotus-cli/commands" "$HERODOTUS_DIR/"
+    if [[ -f "$temp_dir/herodotus-cli/h" ]]; then
+        cp "$temp_dir/herodotus-cli/h" "$INSTALL_DIR/"
+        chmod +x "$INSTALL_DIR/h"
+    fi
     
     # Make executable
-    chmod +x "$INSTALL_DIR/herodotus"
+    chmod +x "$INSTALL_DIR/hero"
     
     # Create version file
     echo "$VERSION" > "$HERODOTUS_DIR/version"
@@ -168,7 +172,7 @@ update_path() {
         if ! grep -q "$INSTALL_DIR" "$shell_rc" 2>/dev/null; then
             echo -e "${YELLOW}Adding $INSTALL_DIR to PATH in $shell_rc${NC}"
             echo "" >> "$shell_rc"
-            echo "# Herodotus CLI" >> "$shell_rc"
+            echo "# Hero CLI (hero / h)" >> "$shell_rc"
             echo "export PATH=\"\$PATH:$INSTALL_DIR\"" >> "$shell_rc"
             echo -e "${GREEN}✓${NC} PATH updated. Please run: ${CYAN}source $shell_rc${NC} or restart your terminal"
         else
@@ -182,11 +186,12 @@ update_path() {
 
 # Function to verify installation
 verify_installation() {
-    if [[ -f "$INSTALL_DIR/herodotus" && -x "$INSTALL_DIR/herodotus" ]]; then
-        echo -e "${GREEN}✓${NC} Herodotus CLI installed successfully"
+    if [[ -f "$INSTALL_DIR/hero" && -x "$INSTALL_DIR/hero" ]]; then
+        echo -e "${GREEN}✓${NC} Hero CLI installed successfully"
         echo -e "${GREEN}✓${NC} Installation directory: ${CYAN}$INSTALL_DIR${NC}"
         echo -e "${GREEN}✓${NC} Commands directory: ${CYAN}$HERODOTUS_DIR/commands${NC}"
         echo -e "${GREEN}✓${NC} Version: ${CYAN}$VERSION${NC}"
+        echo -e "${GREEN}✓${NC} Run: ${CYAN}hero help${NC} or ${CYAN}h help${NC}"
         return 0
     else
         echo -e "${RED}✗${NC} Installation failed" >&2
@@ -197,7 +202,7 @@ verify_installation() {
 
 # Main installation function
 main() {
-    echo -e "${BOLD}${PURPLE} Installing Herodotus Cloud Dev CLI${NC}"
+    echo -e "${BOLD}${PURPLE} Hero Cloud Dev CLI${NC}"
     echo -e "${BOLD}Version:${NC} $VERSION"
     echo ""
     
@@ -207,8 +212,8 @@ main() {
     # Create directories
     create_directories
     
-    # Install Herodotus CLI
-    install_herodotus
+    # Install Hero CLI
+    install_hero
     
     # Update PATH
     update_path
@@ -218,16 +223,16 @@ main() {
         echo ""
         echo -e "${BOLD}${GREEN} Installation Complete!${NC}"
         echo ""
-        echo -e "${CYAN}Running 'herodotus help' to show available commands:${NC}"
+        echo -e "${CYAN}Running 'hero help' to show available commands:${NC}"
         echo ""
         
-        # Try to run herodotus help
-        if command_exists herodotus; then
-            herodotus help
+        # Try to run hero help
+        if command_exists hero; then
+            hero help
         else
-            echo -e "${YELLOW}Note:${NC} 'herodotus' command not found in current PATH"
+            echo -e "${YELLOW}Note:${NC} 'hero' command not found in current PATH"
             echo -e "Please restart your terminal or run: ${CYAN}source ~/.zshrc${NC} (or ${CYAN}source ~/.bashrc${NC})"
-            echo -e "Then run: ${CYAN}herodotus help${NC}"
+            echo -e "Then run: ${CYAN}hero help${NC} or ${CYAN}h help${NC}"
         fi
     else
         echo -e "${RED}Installation failed. Please check the error messages above.${NC}" >&2
