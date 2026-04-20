@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 REPO_URL="https://github.com/HerodotusDev/herodotus-cloud-dev-cli"
 INSTALL_DIR="${HOME}/.local/bin"
 HERODOTUS_DIR="${HOME}/.herodotus"
-VERSION="1.1.5"
+VERSION="1.1.6"
 
 # Function to detect OS and architecture
 detect_platform() {
