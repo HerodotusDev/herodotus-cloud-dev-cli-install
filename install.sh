@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 REPO_URL="https://github.com/HerodotusDev/herodotus-cloud-dev-cli"
 INSTALL_DIR="${HOME}/.local/bin"
 HERODOTUS_DIR="${HOME}/.herodotus"
-VERSION="1.1.6"
+VERSION=""
 
 # Function to detect OS and architecture
 detect_platform() {
@@ -129,6 +129,13 @@ install_hero() {
         exit 1
     fi
     
+    # Read version from repo (single source of truth)
+    if [[ -f "$temp_dir/herodotus-cli/VERSION" ]]; then
+        VERSION="$(tr -d '[:space:]' < "$temp_dir/herodotus-cli/VERSION")"
+    else
+        VERSION="unknown"
+    fi
+    
     # Copy files to installation directory
     echo -e "${CYAN}Installing files...${NC}"
     cp "$temp_dir/herodotus-cli/hero" "$INSTALL_DIR/"
@@ -137,12 +144,12 @@ install_hero() {
         cp "$temp_dir/herodotus-cli/h" "$INSTALL_DIR/"
         chmod +x "$INSTALL_DIR/h"
     fi
+    if [[ -f "$temp_dir/herodotus-cli/VERSION" ]]; then
+        cp "$temp_dir/herodotus-cli/VERSION" "$HERODOTUS_DIR/"
+    fi
     
     # Make executable
     chmod +x "$INSTALL_DIR/hero"
-    
-    # Create version file
-    echo "$VERSION" > "$HERODOTUS_DIR/version"
 }
 
 # Function to update PATH if needed
@@ -202,8 +209,7 @@ verify_installation() {
 
 # Main installation function
 main() {
-    echo -e "${BOLD}${PURPLE} Hero Cloud Dev CLI${NC}"
-    echo -e "${BOLD}Version:${NC} $VERSION"
+    echo -e "${BOLD}${PURPLE} Hero Cloud Dev CLI Installer${NC}"
     echo ""
     
     # Check dependencies
